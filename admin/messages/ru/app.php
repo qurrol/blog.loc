@@ -145,4 +145,5 @@ return [
     'Email is confirmed' => 'Email подтвержден',
     'Email is not confirmed' => 'Email не подтвержден',
     'Email Verified At' => 'Дата подтверждения Email',
+    'Post Categories' => 'Категории постов'
 ];

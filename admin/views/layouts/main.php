@@ -49,11 +49,20 @@ FontAwesomeAsset::register($this);
 
     if (!Yii::$app->user->isGuest) {
         $menuItems = [
-            ['label' => 'Пользователи', 'url' => ['/user']],
+            ['label' => 'Пользователи',
+                'items' => [
+                        ['label' => 'Учетки пользователей', 'url' => ['/user']],
+                    ['label' => 'Соц.сети пользователей', 'url' => ['/social-network']],
+                    ['label' => 'Информация о пользователях', 'url' => ['/user-ext']],
+                ]
+            ],
+
             [
                 'label' => 'Контент',
                 'items' => [
                     ['label' => 'Тексты', 'url' => ['/text']],
+                    ['label' => 'Категории', 'url' => ['/post-category']],
+                    ['label' => 'Посты', 'url' => ['/post']],
                 ]
             ],
             [

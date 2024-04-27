@@ -1,12 +1,11 @@
 <?php
 
-use yii\bootstrap5\{ActiveForm, Html};
+use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 
-/**
- * @var $this  yii\web\View
- * @var $model common\models\UserSearch
- * @var $form  yii\widgets\ActiveForm
- */
+/** @var yii\web\View $this */
+/** @var common\models\UserSearch $model */
+/** @var yii\widgets\ActiveForm $form */
 ?>
 
 <div class="user-search">
@@ -26,9 +25,19 @@ use yii\bootstrap5\{ActiveForm, Html};
 
     <?= $form->field($model, 'auth_key') ?>
 
+    <?php // echo $form->field($model, 'password_reset_token') ?>
+
+    <?php // echo $form->field($model, 'last_login_at') ?>
+
+    <?php // echo $form->field($model, 'created_at') ?>
+
+    <?php // echo $form->field($model, 'updated_at') ?>
+
+    <?php // echo $form->field($model, 'status') ?>
+
     <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
+        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
+        <?= Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

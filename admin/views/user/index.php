@@ -1,78 +1,52 @@
 <?php
 
-use admin\components\widgets\AdminWidgetHelper;
-use kartik\{export\ExportMenu, grid\ActionColumn, grid\GridView, grid\SerialColumn};
+use common\models\User;
 use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\grid\ActionColumn;
+use yii\grid\GridView;
 
-/**
- * @var $this         yii\web\View
- * @var $searchModel  common\models\UserSearch
- * @var $dataProvider yii\data\ActiveDataProvider
- */
+/** @var yii\web\View $this */
+/** @var common\models\UserSearch $searchModel */
+/** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = Yii::t('app', 'Users');
+$this->title = 'Users';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?php
-    $gridColumns = [
-        ['class' => SerialColumn::class],
-        'id',
-        'username',
-        'auth_source',
+    <p>
+        <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
 
-        'userExt.first_name',
-        'userExt.middle_name',
-        'userExt.last_name',
-
-        'userExt.email',
-        'userExt.email_is_verified',
-        'userExt.email_verified_at',
-
-        'last_login_at:datetime',
-        'created_at:datetime',
-    ];
-
-    // Renders a export dropdown menu
-    echo ExportMenu::widget([
-        'dataProvider' => $dataProvider,
-        'columns' => $gridColumns
-    ]); ?>
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => SerialColumn::class],
+            ['class' => 'yii\grid\SerialColumn'],
 
-            AdminWidgetHelper::getFixedWidthColumn(),
+            'id',
             'username',
+            'password_hash',
             'auth_source',
-            'userExt.last_name',
+            'auth_key',
+            //'password_reset_token',
+            //'last_login_at',
+            //'created_at',
+            //'updated_at',
+            //'status',
             [
-                'label' => 'Email',
-                'value' => static function ($data) {
-                    return $data->userExt->email
-                        ? '<span style="color:green" title="' . Yii
-                            ::t('app', 'Email is confirmed') . '">' . $data->userExt->email . '</span>'
-                        : ('<span style="color:red" title="' . Yii
-                                ::t(
-                                    'app',
-                                    'Email is not confirmed'
-                                ) . '">' . $data->userExt->unconfirmed_email . '</span>');
-                },
-                'format' => 'raw',
-            ],
-            AdminWidgetHelper::getDataRangeItem('last_login_at', $searchModel),
-            AdminWidgetHelper::getDataRangeItem('created_at', $searchModel),
-
-            [
-                'class' => ActionColumn::class,
-                'template' => '{view} {delete}'
+                'class' => ActionColumn::className(),
+                'urlCreator' => function ($action, User $model, $key, $index, $column) {
+                    return Url::toRoute([$action, 'id' => $model->id]);
+                 }
             ],
         ],
     ]); ?>
+
+
 </div>
