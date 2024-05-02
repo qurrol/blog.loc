@@ -1,5 +1,6 @@
 <?php
 
+use common\models\Post;
 use yii\helpers\Html;
 use yii\redactor\widgets\Redactor;
 use yii\widgets\ActiveForm;
@@ -20,7 +21,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'post_category_id')->textInput() ?>
 
-    <?= $form->field($model, 'status')->textInput() ?>
+<!--    --><?php //= $form->field($model, 'status')->textInput() ?>
+    <?= $form->field($model, 'status')->dropDownList(Post::getStatusOptions(), ['prompt' => 'Выберите статус']); ?>
 
     <?= $form->field($model, 'image')->textInput(['maxlength' => true]) ?>
 

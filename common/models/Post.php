@@ -21,6 +21,10 @@ use Yii;
 class Post extends \yii\db\ActiveRecord
 {
     /**
+     * @var mixed|null
+     */
+
+    /**
      * {@inheritdoc}
      */
     public static function tableName()
@@ -59,6 +63,19 @@ class Post extends \yii\db\ActiveRecord
         ];
     }
 
+    const status_brandnew = 10;
+    const status_published = 20;
+    const status_rejected = 30;
+
+    public static function getStatusOptions()
+    {
+        return [
+            self::status_brandnew => 'Новый',
+            self::status_published => 'Опубликовано',
+            self::status_rejected => 'Отклоненный',
+        ];
+    }
+
     /**
      * Gets query for [[PostCategory]].
      *
@@ -68,4 +85,5 @@ class Post extends \yii\db\ActiveRecord
     {
         return $this->hasOne(PostCategory::class, ['id' => 'post_category_id']);
     }
+
 }
