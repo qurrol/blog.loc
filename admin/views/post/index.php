@@ -10,6 +10,7 @@ use yii\grid\GridView;
 /** @var common\models\PostSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
+
 $this->title = Yii::t('app','Posts');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -31,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'user_id',
             'title',
-            'text:ntext',
+            'text:text',
             'post_category_id',
             'status',
             //'image',

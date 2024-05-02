@@ -62,7 +62,8 @@ return [
         'gridview' => [
             'class' => \kartik\grid\Module::class,
             // other module settings
-        ]
+        ],
+        'redactor' => 'yii\redactor\RedactorModule',
     ],
 
     'components' => [

@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\redactor\widgets\Redactor;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
@@ -14,7 +15,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'text')->textarea(['rows' => 6]) ?>
+<!--    --><?php //= $form->field($model, 'text')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'text')->widget(Redactor::className()) ?>
 
     <?= $form->field($model, 'post_category_id')->textInput() ?>
 
