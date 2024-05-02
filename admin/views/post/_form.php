@@ -29,12 +29,13 @@ use kartik\file\FileInput;
 
     <?= $form->field($model, 'imageFile')->widget(FileInput::classname(), [
                                                     'options' => ['accept' => 'image/*'],
-                                                    'pluginOptions' => ['showUpload' => false,]
+                                                    'pluginOptions' => ['showUpload' => false,],
+
                                                     ]);
     ?>
-    <?= $form->field($model, 'created_at')->textInput() ?>
-
-    <?= $form->field($model, 'updated_at')->textInput() ?>
+<!--    --><?php //= $form->field($model, 'created_at')->textInput() ?>
+<!---->
+<!--    --><?php //= $form->field($model, 'updated_at')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app','Save'), ['class' => 'btn btn-success']) ?>

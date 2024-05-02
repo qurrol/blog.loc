@@ -32,12 +32,32 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'user_id',
             'title',
-            'text:text',
-            'post_category_id',
-            'status',
-            //'image',
-            //'created_at',
-            //'updated_at',
+            [
+                'attribute' => 'status',
+                'value' => function ($model) {
+                    return $model->getStatusOptions()[$model->status];
+                },
+            ],
+            [
+                'attribute' => 'post_category_id',
+                'value' => function ($model) {
+                    return $model->postCategory->name;
+                },
+            ],
+            [
+                    'attribute' => Yii::t('app','image'),
+                'format' => 'raw',
+                'value' => function($model) {
+                    $imageUrl = '/uploads/' . $model->image;
+                    return Html::img($imageUrl, [
+                        'alt' => 'Картинка',
+                        'style' => 'width:70px;'
+                ]   );
+                },
+            ],
+            'created_at:datetime',
+            'updated_at:datetime',
+
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Post $model, $key, $index, $column) {

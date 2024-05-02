@@ -3,6 +3,8 @@
 namespace common\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 use yii\web\UploadedFile;
 
 /**
@@ -44,7 +46,7 @@ class Post extends \yii\db\ActiveRecord
             [['post_category_id'], 'required'],
             [['post_category_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['title', 'image'], 'string', 'max' => 255],
-            [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg'],
+            [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
             [['post_category_id'], 'exist', 'skipOnError' => true, 'targetClass' => PostCategory::class, 'targetAttribute' => ['post_category_id' => 'id']],
         ];
     }
@@ -97,20 +99,25 @@ class Post extends \yii\db\ActiveRecord
 
     public function beforeSave($insert): bool
     {
-        $uploads = Yii::getAlias('@uploads');
-        if (!$insert && !empty($this->image)) {
-            $oldImagePath = $uploads . '/' . $this->getOldAttribute('image');
-            if(file_exists($oldImagePath)){
-                unlink($oldImagePath);
+        if (parent::beforeSave($insert)) {
+            $uploads = Yii::getAlias('@uploads');
+            if (!$insert && !empty($this->image)) {
+                $oldImagePath = $uploads . '/' . $this->getOldAttribute('image');
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
             }
+            if ($this->imageFile) {
+                $filename = Yii::$app->security->generateRandomString();
+                $extension = $this->imageFile->extension;
+                $this->image = $filename . '.' . $extension; // <- путь до файла
+
+                $this->imageFile->saveAs($uploads . '/' . $filename . '.' . $extension);
+                return parent::beforeSave($insert);
+            }
+            return true;
         }
-
-        $filename = Yii::$app->security->generateRandomString();
-        $extension = $this->imageFile->extension;
-        $this->image =  $filename . '.' . $extension; // <- путь до файла
-
-        $this->imageFile->saveAs($uploads . '/' . $filename . '.' . $extension);
-        return parent::beforeSave($insert);
+        return false;
     }
 
     public function afterDelete()
@@ -124,6 +131,19 @@ class Post extends \yii\db\ActiveRecord
             unlink($path);
         }
         parent::afterDelete();
+    }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::class,
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                ],
+            ],
+        ];
     }
 
 }
