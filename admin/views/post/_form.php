@@ -4,6 +4,7 @@ use common\models\Post;
 use yii\helpers\Html;
 use yii\redactor\widgets\Redactor;
 use yii\widgets\ActiveForm;
+use kartik\file\FileInput;
 
 /** @var yii\web\View $this */
 /** @var common\models\Post $model */
@@ -24,14 +25,19 @@ use yii\widgets\ActiveForm;
 <!--    --><?php //= $form->field($model, 'status')->textInput() ?>
     <?= $form->field($model, 'status')->dropDownList(Post::getStatusOptions(), ['prompt' => 'Выберите статус']); ?>
 
-    <?= $form->field($model, 'image')->textInput(['maxlength' => true]) ?>
+<!--    --><?php //= $form->field($model, 'image')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'imageFile')->widget(FileInput::classname(), [
+                                                    'options' => ['accept' => 'image/*'],
+                                                    'pluginOptions' => ['showUpload' => false,]
+                                                    ]);
+    ?>
     <?= $form->field($model, 'created_at')->textInput() ?>
 
     <?= $form->field($model, 'updated_at')->textInput() ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton(Yii::t('app','Save'), ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

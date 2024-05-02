@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "Post".
@@ -21,8 +22,9 @@ use Yii;
 class Post extends \yii\db\ActiveRecord
 {
     /**
-     * @var mixed|null
+     * @var UploadedFile
      */
+    public $imageFile;
 
     /**
      * {@inheritdoc}
@@ -42,6 +44,7 @@ class Post extends \yii\db\ActiveRecord
             [['post_category_id'], 'required'],
             [['post_category_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['title', 'image'], 'string', 'max' => 255],
+            [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg'],
             [['post_category_id'], 'exist', 'skipOnError' => true, 'targetClass' => PostCategory::class, 'targetAttribute' => ['post_category_id' => 'id']],
         ];
     }
@@ -84,6 +87,40 @@ class Post extends \yii\db\ActiveRecord
     public function getPostCategory()
     {
         return $this->hasOne(PostCategory::class, ['id' => 'post_category_id']);
+    }
+
+    public function beforeValidate(): bool
+    {
+        $this->imageFile = UploadedFile::getInstance($this, 'imageFile');
+        return parent::beforeValidate();
+    }
+
+    public function beforeSave($insert): bool
+    {
+        $uploads = Yii::getAlias('@uploads');
+        if (!$insert && !empty($this->image)) {
+            $oldImagePath = $uploads . '/' . $this->getOldAttribute('image');
+            if(file_exists($oldImagePath)){
+                unlink($oldImagePath);
+            }
+        }
+
+        $filename = Yii::$app->security->generateRandomString();
+        $extension = 'jpg';
+        $this->image = $uploads . '/' . $filename . '.' . $extension; // <- путь до файла
+
+        $this->imageFile->saveAs($uploads . '/' . $filename . '.' . $extension);
+        return parent::beforeSave($insert);
+    }
+
+    public function afterDelete()
+    {
+        $imagePath = $this->image;
+
+        if (file_exists($imagePath)) {
+            unlink($imagePath);
+        }
+        parent::afterDelete();
     }
 
 }

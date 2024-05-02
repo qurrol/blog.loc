@@ -149,4 +149,5 @@ return [
     'Post Category ID' => 'Номер категории поста',
     'Create Post Category' => 'Создать категорию поста',
     'Update Post Category: ' => 'Изменение катеогрии поста: ',
+    'Update Post: ' => 'Изменение поста: ',
 ];
