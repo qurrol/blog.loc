@@ -106,8 +106,8 @@ class Post extends \yii\db\ActiveRecord
         }
 
         $filename = Yii::$app->security->generateRandomString();
-        $extension = 'jpg';
-        $this->image = $uploads . '/' . $filename . '.' . $extension; // <- путь до файла
+        $extension = $this->imageFile->extension;
+        $this->image =  $filename . '.' . $extension; // <- путь до файла
 
         $this->imageFile->saveAs($uploads . '/' . $filename . '.' . $extension);
         return parent::beforeSave($insert);
@@ -115,10 +115,13 @@ class Post extends \yii\db\ActiveRecord
 
     public function afterDelete()
     {
-        $imagePath = $this->image;
+        $uploads = Yii::getAlias('@uploads');
 
-        if (file_exists($imagePath)) {
-            unlink($imagePath);
+        $imagePath = $this->image;
+        $path = $uploads . '/' . $imagePath;
+
+        if (file_exists($path)) {
+            unlink($path);
         }
         parent::afterDelete();
     }
