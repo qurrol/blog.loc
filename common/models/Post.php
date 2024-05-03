@@ -42,6 +42,7 @@ class Post extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
             [['text'], 'string'],
             [['post_category_id'], 'required'],
             [['post_category_id', 'status', 'created_at', 'updated_at'], 'integer'],
@@ -57,6 +58,7 @@ class Post extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
+            'id' => Yii::t('app', 'id'),
             'user_id' => Yii::t('app', 'User ID'),
             'title' => Yii::t('app', 'Title'),
             'text' => Yii::t('app', 'Text'),
@@ -89,6 +91,11 @@ class Post extends \yii\db\ActiveRecord
     public function getPostCategory()
     {
         return $this->hasOne(PostCategory::class, ['id' => 'post_category_id']);
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
     public function beforeValidate(): bool
@@ -149,10 +156,11 @@ class Post extends \yii\db\ActiveRecord
     public function fields()
     {
         return [
+            'user_id',
             'title',
             'text',
-            'post_category_id',
-            'image' => fn () => '/uploads/' . $this->image,
+            'post_category' => fn () => $this->postCategory->name,
+            'image' => fn () => $this->image ? (Yii::$app->request->hostInfo . '/uploads/' . $this->image) : null,
         ];
     }
 

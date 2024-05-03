@@ -30,7 +30,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'user_id',
+            [
+                'attribute' => 'user_id',
+                'value' => function ($model) {
+                    return !empty($model->user->auth_source) ? : null;
+                },
+            ],
             'title',
             [
                 'attribute' => 'status',

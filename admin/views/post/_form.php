@@ -15,6 +15,11 @@ use kartik\file\FileInput;
 
     <?php $form = ActiveForm::begin(); ?>
 
+    <?= $form->field($model, 'user_id')->dropDownList(
+        \yii\helpers\ArrayHelper::map(\common\models\User::find()->all(), 'id', 'auth_source',),
+        ['prompt' => 'Выберите пользователя']);
+    ?>
+
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
 <!--    --><?php //= $form->field($model, 'text')->textarea(['rows' => 6]) ?>
