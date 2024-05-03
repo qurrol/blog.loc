@@ -133,11 +133,12 @@ class Post extends \yii\db\ActiveRecord
     {
         $uploads = Yii::getAlias('@uploads');
 
-        $imagePath = $this->image;
-        $path = $uploads . '/' . $imagePath;
+        if (!empty($this->image)) {
+            $path = $uploads . '/' . $this->image;
 
-        if (file_exists($path)) {
-            unlink($path);
+            if (file_exists($path)) {
+                unlink($path);
+            }
         }
         parent::afterDelete();
     }
@@ -158,11 +159,12 @@ class Post extends \yii\db\ActiveRecord
     public function fields()
     {
         return [
+            'id',
             'user_id',
             'title',
             'text',
-            'post_category' => fn () => $this->postCategory->name,
-            'image' => fn () => $this->image ? (Yii::$app->request->hostInfo . '/uploads/' . $this->image) : null,
+            'post_category' => fn() => $this->postCategory->name,
+            'image' => fn() => $this->image ? (Yii::$app->request->hostInfo . '/uploads/' . $this->image) : null,
         ];
     }
 
