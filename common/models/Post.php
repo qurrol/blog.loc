@@ -100,7 +100,9 @@ class Post extends \yii\db\ActiveRecord
 
     public function beforeValidate(): bool
     {
-        $this->imageFile = UploadedFile::getInstance($this, 'imageFile');
+        if (empty($this->imageFile)) {
+            $this->imageFile = UploadedFile::getInstance($this, 'imageFile');
+        }
         return parent::beforeValidate();
     }
 
