@@ -74,4 +74,41 @@ class PostController extends AppController
         }
     }
 
+    public function actionUpdate($id)
+    {
+        $currentUser = Yii::$app->user->identity;
+        $post = Post::findOne($id);
+
+        if ($post === null) {
+            return $this->returnError('Post not found', 404);
+        }
+
+        if ($post->user_id !== $currentUser->id) {
+            return $this->returnError('Wrong user_id', 401);
+        }
+
+        if (Yii::$app->request->isPut) {
+
+            $postData = Yii::$app->request->getBodyParams();
+
+            foreach ($postData as $key => $value) {
+                if (in_array($key, $post->attributes()) && $key !== 'id' && $key !== 'user_id'
+                    && $key !== 'status' && $key !== 'created_at' && $key !== 'updated_at') {
+                    $post->{$key} = $value;
+                }else{
+                    return $this->returnError('Incorrect parameter', 500);
+                }
+            }
+
+
+            if ($post->save()) {
+                return $this->returnSuccess(['post' => $post]);
+            } else {
+                return $this->returnError('Failed to save post', 500);
+            }
+        } else {
+            return $this->returnError('Invalid request method', 405);
+        }
+
+    }
 }
