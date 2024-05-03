@@ -17,7 +17,7 @@ $params = array_merge(
     require __DIR__ . '/params-local.php'
 );
 
-Utils::$ROOT_DOMAIN = $params['rootDomain'];
+Utils::$ROOT_DOMAIN = $params['rootDomain'] ?? '';
 $current_url = (new Request)->absoluteUrl;
 $htdocs_pos = strpos($current_url, '/htdocs');
 if (!$htdocs_pos) {
@@ -106,7 +106,8 @@ return [
                     // translate messages
                     if (isset($response->data['message'])) {
                         $message = $response->data['message'];
-                        $response->data['message'] = is_string($message) ? Yii::t('app', $response->data['message'])
+                        $response->data['message'] = is_string($message)
+                            ? Yii::t('app', $response->data['message'])
                             : $message;
                     }
 

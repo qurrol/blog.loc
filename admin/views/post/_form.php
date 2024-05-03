@@ -20,9 +20,14 @@ use kartik\file\FileInput;
 <!--    --><?php //= $form->field($model, 'text')->textarea(['rows' => 6]) ?>
     <?= $form->field($model, 'text')->widget(Redactor::className()) ?>
 
-    <?= $form->field($model, 'post_category_id')->textInput() ?>
+<!--    --><?php //= $form->field($model, 'post_category_id')->textInput() ?>
+    <?= $form->field($model, 'post_category_id')->dropDownList(
+        \yii\helpers\ArrayHelper::map(\common\models\PostCategory::find()->all(), 'id', 'name',),
+        ['prompt' => 'Выберите категорию']);
+     ?>
 
-<!--    --><?php //= $form->field($model, 'status')->textInput() ?>
+
+    <!--    --><?php //= $form->field($model, 'status')->textInput() ?>
     <?= $form->field($model, 'status')->dropDownList(Post::getStatusOptions(), ['prompt' => 'Выберите статус']); ?>
 
 <!--    --><?php //= $form->field($model, 'image')->textInput(['maxlength' => true]) ?>

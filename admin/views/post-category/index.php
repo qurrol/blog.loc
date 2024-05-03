@@ -1,6 +1,7 @@
 <?php
 
 use common\models\PostCategory;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -31,6 +32,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'name',
+//            [
+//                'attribute' => 'post_category_id',
+//                'value' => 'postCategory.name',
+//                'filter' => Html::activeDropDownList($searchModel, 'post_category_id',
+//                    ArrayHelper::map(PostCategory::find()->all(), 'id', 'name'),
+//
+//                ),
+//            ],
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, PostCategory $model, $key, $index, $column) {

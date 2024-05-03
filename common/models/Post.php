@@ -58,13 +58,13 @@ class Post extends \yii\db\ActiveRecord
     {
         return [
             'user_id' => Yii::t('app', 'User ID'),
-            'title' => Yii::t('app','Title'),
-            'text' => Yii::t('app','Text'),
-            'post_category_id' => Yii::t('app','Post Category ID'),
-            'status' => Yii::t('app','Status'),
-            'image' => Yii::t('app','Image'),
-            'created_at' => Yii::t('app','Created At'),
-            'updated_at' => Yii::t('app','Updated At'),
+            'title' => Yii::t('app', 'Title'),
+            'text' => Yii::t('app', 'Text'),
+            'post_category_id' => Yii::t('app', 'Post Category ID'),
+            'status' => Yii::t('app', 'Status'),
+            'image' => Yii::t('app', 'Image'),
+            'created_at' => Yii::t('app', 'Created At'),
+            'updated_at' => Yii::t('app', 'Updated At'),
         ];
     }
 
@@ -143,6 +143,16 @@ class Post extends \yii\db\ActiveRecord
                     ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
                 ],
             ],
+        ];
+    }
+
+    public function fields()
+    {
+        return [
+            'title',
+            'text',
+            'post_category_id',
+            'image' => fn () => '/uploads/' . $this->image,
         ];
     }
 
